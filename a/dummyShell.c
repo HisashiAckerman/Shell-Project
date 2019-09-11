@@ -1,3 +1,4 @@
+ 
 #include <sys/wait.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -18,6 +19,12 @@ char *builtin_str[] = {
   "cd",
   "help",
   "exit"
+};
+
+int (*builtin_func[]) (char **) = {
+  &lsh_cd,
+  &lsh_help,
+  &lsh_exit
 };
 
 int lsh_num_builtins() {
@@ -57,8 +64,7 @@ int lsh_help(char **args)
   printf("Type program names and arguments, and hit enter.\n");
   printf("The following are built in:\n");
 
-  for (i = 0; i < 3*sizeof(char); i++) {
-    
+  for (i = 0; i < lsh_num_builtins(); i++) {
     printf("  %s\n", builtin_str[i]);
   }
 
@@ -120,17 +126,9 @@ int lsh_execute(char **args)
     return 1;
   }
 
-  for (i = 0; i < 3*sizeof(char); i++) {
-    if (strcmp(args[0], "help") == 0) {
-      return (lsh_help(args));
-    }
-    else if (strcmp(args[0], "cd") == 0) {
-      
-      return (lsh_cd(args));
-    }
-    else if (strcmp(args[0], "exit") == 0) {
-      
-      return 0;
+  for (i = 0; i < lsh_num_builtins(); i++) {
+    if (strcmp(args[0], builtin_str[i]) == 0) {
+      return (*builtin_func[i])(args);
     }
   }
 
@@ -227,7 +225,7 @@ void lsh_loop(void)
   int status;
 
   do {
-    printf(">>> ");
+    printf("> ");
     line = lsh_read_line();
     args = lsh_split_line(line);
     status = lsh_execute(args);

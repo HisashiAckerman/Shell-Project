@@ -19,7 +19,8 @@ char *builtin_str[] = {
   "exit",
   "cw",
   "ip",
-  "repl"
+  "repl",
+  "hex"
 };
 
 
@@ -35,6 +36,34 @@ int lsh_dc(char **args)
     }
   }
   return 1;
+}
+
+int lsh_hex(char **args)
+{
+    unsigned char str[100],strH[200];
+    int i,j;
+     
+    printf("Enter string: ");
+    scanf("%[^\n]s",str);
+    //str=args[1];
+     
+    //printf("\nString is: %s\n",str);
+     
+    /*set strH with nulls*/
+    memset(strH,0,sizeof(strH));
+     
+    /*converting str character into Hex and adding into strH*/
+    for(i=0,j=0;i<strlen(str);i++,j+=2)
+    { 
+        sprintf((char*)strH+j,"%02X",str[i]);
+    }
+    strH[j]='\0'; /*adding NULL in the end*/
+     
+    printf("Hexadecimal converted string is: \n");
+    printf("%s\n",strH);
+     
+     
+    return 1;
 }
 
 #define MAX 256
@@ -96,7 +125,7 @@ printf(" Input the file name to be opened : ");
         return 1;
   }
     
-    
+
 
 
 int lsh_IP(char **args)
@@ -122,7 +151,7 @@ int lsh_IP(char **args)
   hostaddr = inet_ntoa(saddr->sin_addr);
 
   printf("Address for %s is %s\n", hostname, hostaddr);
-  return 1;
+  exit(0);
 }
 
 
@@ -181,7 +210,7 @@ int lsh_help(char **args)
   printf("Type program names and arguments, and hit enter.\n");
   printf("The following are my custom commands:\n");
 
-  for (i = 0; i < 6*sizeof(char); i++) {
+  for (i = 0; i < 7*sizeof(char); i++) {
     
     printf("  %s\n", builtin_str[i]);
   }
@@ -232,7 +261,7 @@ int lsh_execute(char **args)
     return 1;
   }
 
-  for (i = 0; i < 6*sizeof(char); i++) {
+  for (i = 0; i < 7*sizeof(char); i++) {
     if (strcmp(args[0], "help") == 0) {
       return (lsh_help(args));
     }
@@ -255,6 +284,10 @@ int lsh_execute(char **args)
     else if (strcmp(args[0], "repl") == 0) {
       
       return (lsh_repl(args));
+    }
+    else if (strcmp(args[0], "hex") == 0) {
+      
+      return (lsh_hex(args));
     }
   }
 

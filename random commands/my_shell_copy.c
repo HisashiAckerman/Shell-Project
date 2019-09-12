@@ -18,7 +18,8 @@ char *builtin_str[] = {
   "help",
   "exit",
   "cw",
-  "ip"
+  "ip", 
+  "aud"
 };
 
 
@@ -61,7 +62,10 @@ int lsh_IP(char **args)
   printf("Address for %s is %s\n", hostname, hostaddr);
   exit(0);
 }
-
+int lsh_aud(char **args)
+{
+    
+}
 
 
 int lsh_cw(char **args)
@@ -118,7 +122,7 @@ int lsh_help(char **args)
   printf("Type program names and arguments, and hit enter.\n");
   printf("The following are my custom commands:\n");
 
-  for (i = 0; i < 5*sizeof(char); i++) {
+  for (i = 0; i < 6*sizeof(char); i++) {
     
     printf("  %s\n", builtin_str[i]);
   }
@@ -169,7 +173,7 @@ int lsh_execute(char **args)
     return 1;
   }
 
-  for (i = 0; i < 5*sizeof(char); i++) {
+  for (i = 0; i < 6*sizeof(char); i++) {
     if (strcmp(args[0], "help") == 0) {
       return (lsh_help(args));
     }
@@ -188,6 +192,10 @@ int lsh_execute(char **args)
     else if (strcmp(args[0], "ip") == 0) {
       
       return (lsh_IP(args));
+    }
+    else if (strcmp(args[0], "aud") == 0) {
+      
+      return (execvp(args[0], args));
     }
   }
 

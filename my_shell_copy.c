@@ -20,11 +20,25 @@ char *builtin_str[] = {
   "cw",
   "ip",
   "repl",
-  "hex"
+  "hex",
+  "client",
+  "tree",
+  "web",
+  "game",
+  "graphics"
 };
 
 
-
+int lsh_client(char **args){
+  // printf("java UDPClient.java");
+  system("java UDPClientcopy_.java");
+  return 1;
+}
+int lsh_game(char **args){
+  // printf("java UDPClient.java");
+  system("./ball");
+  return 1;
+}
 
 int lsh_dc(char **args)
 {
@@ -35,6 +49,18 @@ int lsh_dc(char **args)
       perror("lsh");
     }
   }
+  return 1;
+}
+int lsh_tree(char **args){
+  system("./tree");
+  return 1;
+}
+int lsh_web(char **args){
+  system("w3m google.com");
+  return 1;
+}
+int lsh_graphics(char **args){
+  system("./graphics");
   return 1;
 }
 
@@ -210,7 +236,7 @@ int lsh_help(char **args)
   printf("Type program names and arguments, and hit enter.\n");
   printf("The following are my custom commands:\n");
 
-  for (i = 0; i < 7*sizeof(char); i++) {
+  for (i = 0; i < 12*sizeof(char); i++) {
     
     printf("  %s\n", builtin_str[i]);
   }
@@ -261,7 +287,7 @@ int lsh_execute(char **args)
     return 1;
   }
 
-  for (i = 0; i < 7*sizeof(char); i++) {
+  for (i = 0; i < 11*sizeof(char); i++) {
     if (strcmp(args[0], "help") == 0) {
       return (lsh_help(args));
     }
@@ -288,6 +314,24 @@ int lsh_execute(char **args)
     else if (strcmp(args[0], "hex") == 0) {
       
       return (lsh_hex(args));
+    }
+    else if (strcmp(args[0], "client") == 0) {
+      
+      return (lsh_client(args));
+    }
+    else if (strcmp(args[0], "tree") == 0) {
+      
+      return (lsh_tree(args));
+    }
+    else if (strcmp(args[0], "web") == 0) {
+      
+      return (lsh_web(args));
+    }
+    else if (strcmp(args[0], "game") == 0) {
+      return (lsh_game(args));
+    }
+    else if (strcmp(args[0], "graphics") == 0) {
+      return (lsh_graphics(args));
     }
   }
 

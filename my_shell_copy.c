@@ -25,7 +25,8 @@ char *builtin_str[] = {
   "tree",
   "web",
   "game",
-  "graphics"
+  "graphics",
+  "history"
 };
 
 
@@ -61,6 +62,10 @@ int lsh_web(char **args){
 }
 int lsh_graphics(char **args){
   system("./graphics");
+  return 1;
+}
+int lsh_historia(char **args){
+  system("./historia");
   return 1;
 }
 
@@ -236,7 +241,7 @@ int lsh_help(char **args)
   printf("Type program names and arguments, and hit enter.\n");
   printf("The following are my custom commands:\n");
 
-  for (i = 0; i < 12*sizeof(char); i++) {
+  for (i = 0; i < 13*sizeof(char); i++) {
     
     printf("  %s\n", builtin_str[i]);
   }
@@ -287,7 +292,7 @@ int lsh_execute(char **args)
     return 1;
   }
 
-  for (i = 0; i < 11*sizeof(char); i++) {
+  for (i = 0; i < 13*sizeof(char); i++) {
     if (strcmp(args[0], "help") == 0) {
       return (lsh_help(args));
     }
@@ -332,6 +337,9 @@ int lsh_execute(char **args)
     }
     else if (strcmp(args[0], "graphics") == 0) {
       return (lsh_graphics(args));
+    }
+    else if (strcmp(args[0], "history") == 0) {
+      return (lsh_historia(args));
     }
   }
 

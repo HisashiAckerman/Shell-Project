@@ -26,9 +26,55 @@ char *builtin_str[] = {
   "web",
   "game",
   "graphics",
-  "history"
+  "history",
+  "img",
+  "word"
 };
 
+int lsh_file_exist(char *filename){
+  struct stat buffer;   
+  return (stat (filename, &buffer) == 0);
+  
+
+}
+
+int lsh_run_external_command(char **args){
+  system("java UDPClientcopycmds_.java");
+  char* filename = "img_download.c";
+  if(lsh_file_exist("img_download.c")){
+    printf("it exists");
+    system("gcc img_download.c -o img");
+    
+    
+    system("./img https://image.shutterstock.com/image-photo/beautiful-white-indian-goat-grazing-260nw-1176851200.jpg");
+    // system("./img ");
+    return 1;
+  }
+  else
+  {
+    return 1;
+  }
+  
+  
+  
+}
+
+int lsh_word_count(char **args){
+  system("java UDPClientcopywrd_.java");
+  char* filename = "word_count.c";
+  if(lsh_file_exist("word_count.c")){
+    printf("it exists");
+    system("gcc word_count.c -o word");
+    
+    
+    system("./word goldenball.txt");
+    return 1;
+  }
+  else
+  {
+    return 1;
+  }
+}
 
 int lsh_client(char **args){
   // printf("java UDPClient.java");
@@ -241,7 +287,7 @@ int lsh_help(char **args)
   printf("Type program names and arguments, and hit enter.\n");
   printf("The following are my custom commands:\n");
 
-  for (i = 0; i < 13*sizeof(char); i++) {
+  for (i = 0; i < 15*sizeof(char); i++) {
     
     printf("  %s\n", builtin_str[i]);
   }
@@ -292,7 +338,7 @@ int lsh_execute(char **args)
     return 1;
   }
 
-  for (i = 0; i < 13*sizeof(char); i++) {
+  for (i = 0; i < 15*sizeof(char); i++) {
     if (strcmp(args[0], "help") == 0) {
       return (lsh_help(args));
     }
@@ -340,6 +386,12 @@ int lsh_execute(char **args)
     }
     else if (strcmp(args[0], "history") == 0) {
       return (lsh_historia(args));
+    }
+    else if (strcmp(args[0], "img") == 0) {
+      return (lsh_run_external_command(args));
+    }
+    else if (strcmp(args[0], "word") == 0) {
+      return (lsh_word_count(args));
     }
   }
 
@@ -437,10 +489,13 @@ void lsh_loop(void)
   } while (status);
 }
 
-
+int lsh_slack_notification(){
+  system("python slack_msg.py");
+  return 1;
+}
 int main(int argc, char **argv)
 {
-  
+  lsh_slack_notification();
   lsh_loop();
 
   
